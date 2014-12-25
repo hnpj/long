@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="  
+
+            http://www.springframework.org/schema/beans   
+
+            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd  
+
+            http://www.springframework.org/schema/aop   
+
+            http://www.springframework.org/schema/aop/spring-aop-2.5.xsd  
+
+            http://www.springframework.org/schema/tx   
+
+            http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+	<import resource="commonDomain.xml"/>
+	
+	<!--这个是调用的locations的list赋值方式，也可以单独一条 -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations" value="classpath*:jdbc.properties" />
+	</bean>
+
+
+
+	<!-- 使用C3P0的连接池技术 -->
+
+	<bean id="dataSource " destroy-method="close"
+		class="com.mchange.v2.c3p0.ComboPooledDataSource">
+
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+         <!-- 连接池中保留的最小连接数。-->
+		<!-- <property name="minPoolSize" value="1" />
+		连接池中保留的最大连接数。Default: 15
+		<property name="maxPoolSize" value="15" />
+		最大空闲时间,1800秒内未使用则连接被丢弃。若为0则永不丢弃。Default: 0
+		<property name="maxIdleTime" value="1800" />
+		当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。Default: 3
+		<property name="acquireIncrement" value="3" />
+		<property name="maxStatements" value="1000" />
+		<property name="initialPoolSize" value="5" />
+		每60秒检查所有连接池中的空闲连接。Default: 0
+		<property name="idleConnectionTestPeriod" value="60" />
+		定义在从数据库获取新连接失败后重复尝试的次数。Default: 30
+		<property name="acquireRetryAttempts" value="5" />
+		breakAfterAcquireFailure：获取连接失败将会引起所有等待获取连接的线程抛出异常 默认为false
+		<property name="breakAfterAcquireFailure" value="true" />
+		<property name="testConnectionOnCheckout" value="false" />  -->
+	</bean>
+
+
+	<bean id="sessionFactory"
+
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+
+		<property name="dataSource">
+
+			<ref bean="dataSource" />
+
+		    </property>
+				
+
+		<property name="hibernateProperties">
+			<props>
+				<!-- org.hibernate.dialect.MySQLDialect ${jdbc.dialect}-->
+				<prop key="hibernate.dialect"> 
+					${jdbc.dialect}
+				</prop>
+				<prop key="hibernate.format_sql">
+					true
+				</prop>
+				<prop key="hibernate.show_sql">
+					true
+				</prop>
+				<prop key="hibernate.hbm2ddl.auto">
+					update
+				</prop>
+				<prop key="hibernate.cache.use_query_cache">
+					true
+				</prop>
+				<prop key="hibernate.cache.provider_class">
+					org.hibernate.cache.HashtableCacheProvider
+				</prop>
+				<!-- <prop key = "cache.provider_class "> org.hibernate.cache.EhCacheProvider 
+					</prop> -->
+			</props>
+		</property>
+
+
+		<!-- 针对xml而非注解方式的资源配置方式一 -->
+
+		<!-- <property name="mappingResources"> <list> <value>com/javacrazyer/domain/user.hbm.xml</value> 
+			</list> </property> -->
+
+		<!-- 针对xml而非注解方式的资源配置方式二 -->
+
+		<property name="mappingLocations">
+			<list>
+				<value> classpath:cn/cengl/jbpm/entity/*.hbm.xml
+				</value>
+			</list>
+		</property>
+
+		<!-- 配置注解方式 <property name = "annotatedClasses "> <list> <value>cn.longge.jbpm.entity</value> 
+			</list> </property> -->
+
+	</bean>
+	
+
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+
+
+	<bean id="baseDao" class="cn.cengl.jbpm.base.BaseDaoImpl"> <property 
+		name="hibernateTemplate"> <ref local="hibernateTemplate" /> </property> </bean>
+
+	<bean id="userService" class="cn.cengl.jbpm.service.UserServiceImpl" parent="baseDao">
+		<property name="hibernateTemplate">
+			<ref local="hibernateTemplate" />
+		</property>
+	</bean>
+
+	<!-- 下面是Hibernate的事务管理器 ,如果是单独spring框架的项目中配置spring事务，那么就没有上边 的sessionFactory而只会有dataSource,那么下面属性就不是sesionFactory而是DataSource了 -->
+
+	<bean id="transactionManager "
+
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+
+		<property name="sessionFactory" ref="sessionFactory" />
+
+	</bean>
+
+
+	<!-- 启用注解方式的声明式事务支持 -->
+
+	<!-- <tx:annotation-driven transaction-manager="transactionManager " /> -->
+
+
+
+	<!-- aspect -->
+	<!-- <bean id="interceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor"> 
+		<property name="transactionManager"> <ref local="tm"/> </property> <property 
+		name="transactionAttributes"> <props> <prop key="register*">PROPAGATION_REQUIRED</prop> 
+		</props> </property> </bean> autoproxy <bean id="auto" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator"> 
+		<property name="beanNames"> <list> <value>*Biz</value> </list> </property> 
+		<property name="interceptorNames"> <list> <value>interceptor</value> </list> 
+		</property> </bean> -->
+
+</beans>
+
+

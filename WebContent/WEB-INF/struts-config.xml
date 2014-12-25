@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+
+<struts-config>
+	<form-beans>
+		<form-bean name="UserActionForm" type="cn.ceng.jbpm.web.action.formbean.UserActionForm"></form-bean>
+		<!-- <form-bean name="RoleActionForm" type="cn.itcast.oa.web.struts.formbean.RoleActionForm"></form-bean>
+		<form-bean name="DepartmentActionForm" type="cn.itcast.oa.web.struts.formbean.DepartmentActionForm"></form-bean>
+		<form-bean name="ForumManageActionForm" type="cn.itcast.oa.web.struts.formbean.ForumManageActionForm"></form-bean>
+		<form-bean name="ForumActionForm" type="cn.itcast.oa.web.struts.formbean.ForumActionForm"></form-bean>
+		<form-bean name="TopicActionForm" type="cn.itcast.oa.web.struts.formbean.TopicActionForm"></form-bean>
+		<form-bean name="ReplyActionForm" type="cn.itcast.oa.web.struts.formbean.ReplyActionForm"></form-bean> -->
+	</form-beans>
+	<global-exceptions />
+	<global-forwards />
+	<action-mappings>
+		<!-- <action path="/InsertUserAction" type="cn.itcast.oa.web.struts.action.InsertUserAction"></action>
+
+		岗位管理
+		<action path="/RoleAction" type="cn.itcast.oa.web.struts.action.RoleAction" parameter="method"
+			name="RoleActionForm" scope="request">
+			<forward name="list" path="/WEB-INF/jsp/RoleAction/list.jsp"></forward>
+			<forward name="saveUI" path="/WEB-INF/jsp/RoleAction/saveUI.jsp"></forward>
+			<forward name="setPrivilegeUI" path="/WEB-INF/jsp/RoleAction/setPrivilegeUI.jsp"></forward>
+			<forward name="toList" path="/RoleAction.do?method=list" redirect="true"></forward>
+		</action>
+
+		部门管理
+		<action path="/DepartmentAction" type="cn.itcast.oa.web.struts.action.DepartmentAction" parameter="method"
+			name="DepartmentActionForm" scope="request">
+			<forward name="list" path="/WEB-INF/jsp/DepartmentAction/list.jsp"></forward>
+			<forward name="saveUI" path="/WEB-INF/jsp/DepartmentAction/saveUI.jsp"></forward>
+			<forward name="toList" path="/DepartmentAction.do?method=list" redirect="true"></forward>
+		</action>
+
+		论坛板块管理
+		<action path="/ForumManageAction" type="cn.itcast.oa.web.struts.action.ForumManageAction" parameter="method"
+			name="ForumManageActionForm" scope="request">
+			<forward name="list" path="/WEB-INF/jsp/ForumManageAction/list.jsp"></forward>
+			<forward name="saveUI" path="/WEB-INF/jsp/ForumManageAction/saveUI.jsp"></forward>
+			<forward name="toList" path="/ForumManageAction.do?method=list" redirect="true"></forward>
+		</action>
+
+		论坛板块
+		<action path="/ForumAction" type="cn.itcast.oa.web.struts.action.ForumAction" parameter="method"
+			name="ForumActionForm" scope="request">
+			<forward name="list" path="/WEB-INF/jsp/ForumAction/list.jsp"></forward>
+			<forward name="show" path="/WEB-INF/jsp/ForumAction/show.jsp"></forward>
+		</action>
+
+		论坛主题
+		<action path="/TopicAction" type="cn.itcast.oa.web.struts.action.TopicAction" parameter="method"
+			name="TopicActionForm" scope="request">
+			<forward name="saveUI" path="/WEB-INF/jsp/TopicAction/saveUI.jsp"></forward>
+			<forward name="show" path="/WEB-INF/jsp/TopicAction/show.jsp"></forward>
+			<forward name="toShow" path="/ReplyAction.do?method=show" redirect="true"></forward>
+		</action>
+
+		论坛回复
+		<action path="/ReplyAction" type="cn.itcast.oa.web.struts.action.ReplyAction" parameter="method"
+			name="ReplyActionForm" scope="request">
+			<forward name="show" path="/WEB-INF/jsp/ReplyAction/show.jsp"></forward>
+			<forward name="saveUI" path="/WEB-INF/jsp/ReplyAction/saveUI.jsp"></forward>
+			<forward name="toShow" path="/ReplyAction.do?method=show" redirect="true"></forward>
+		</action> -->
+
+		<!-- 用户管理 -->
+		<action path="/UserAction" type="cn.ceng.jbpm.web.action.UserAction" parameter="method"
+			name="UserActionForm" scope="request">
+			<forward name="list" path="/WEB-INF/jsp/UserAction/list.jsp"></forward>
+			<forward name="addUI" path="/WEB-INF/jsp/UserAction/addUI.jsp"></forward>
+			<forward name="editUI" path="/WEB-INF/jsp/UserAction/editUI.jsp"></forward>
+			<forward name="toList" path="/UserAction.do?method=list" redirect="true"></forward>
+
+			<forward name="loginUI" path="/WEB-INF/jsp/UserAction/loginUI.jsp"></forward>
+			<forward name="logout" path="/WEB-INF/jsp/UserAction/logout.jsp"></forward>
+			<forward name="index" path="/index.jsp" redirect="true"></forward>
+		</action>
+
+	</action-mappings>
+
+	<message-resources parameter="cn.ceng.jbpm.web.action.formbean.ApplicationResources" />
+</struts-config>
+

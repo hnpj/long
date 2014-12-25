@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+
+<videos>
+
+	<video id="78">
+		<title>盗梦空间</title>
+		<time>45</time>
+	</video>
+
+	<video id="34">
+		<title>星球大战</title>
+		<time>754</time>
+	</video>
+
+	<video id="23">
+		<title>星际迷航</title>
+		<time>484</time>
+	</video>
+
+	<video id="4">
+		<title>越狱</title>
+		<time>855</time>
+	</video>
+
+</videos>
